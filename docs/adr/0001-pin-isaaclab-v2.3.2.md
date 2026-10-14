@@ -26,8 +26,8 @@ Pin every component to the newest GA IsaacLab release and the versions that rele
 | NVIDIA driver | `nvidia-driver-580-open` 580.178.04 | Isaac Sim 5.1 segfaulted on this machine (RTX 5080) with driver 615-open; it starts on 580.178.04 (observed 2026-10-14). |
 | Python | 3.11 | IsaacLab v2.3.2 `environment.yml`. |
 | Isaac Sim | `isaacsim[all,extscache]==5.1.0` | pip, from `pypi.nvidia.com`. |
-| PyTorch | `torch==2.7.0`, `torchvision==0.22.0` (cu128) | IsaacLab v2.3.2 `isaaclab.sh` `ensure_cuda_torch` (x86_64). |
-| IsaacLab | tag `v2.3.2` (`37ddf6268`), local branch `pin/v2.3.2` | Installed with `./isaaclab.sh --install`. |
+| PyTorch | `torch==2.7.0`, `torchvision==0.22.0`, `torchaudio==2.7.0` (cu128) | torch/torchvision from IsaacLab v2.3.2 `isaaclab.sh` `ensure_cuda_torch` (x86_64); torchaudio required by `isaacsim-core`. |
+| IsaacLab | tag `v2.3.2` (`37ddf6268`), local branch `pin/v2.3.2` | Installed by `scripts/setup/install_env.sh`, which runs `./isaaclab.sh --install`. |
 | rsl-rl-lib | 3.1.2 | Pinned by IsaacLab v2.3.2 `isaaclab_rl`. |
 | unitree_rl_lab | this fork, upstream `main` `4960b84` + local fixes | |
 | unitree_model | HuggingFace `unitreerobotics/unitree_model` @ `323e350` | Requires `git-lfs`; see `docs/LESSONS.md`. |
@@ -38,6 +38,8 @@ Several requirements in IsaacLab v2.3.2 have no upper bound and now resolve to v
 - `scripts/setup/build-constraints.txt` (`PIP_BUILD_CONSTRAINT`): `setuptools<81`, without which `flatdict==4.0.1` (pinned by v2.3.2, sdist only) fails to build because current setuptools no longer ships `pkg_resources`. pip 26.2.1 does not apply `PIP_CONSTRAINT` to build environments (observed).
 
 Each entry carries its reason in the file. Exact versions of every installed Python package are recorded in `scripts/setup/env_isaaclab_v232.lock.txt`. The conda env is named `env_isaaclab_v232`.
+
+`scripts/setup/install_env.sh` rebuilds the whole stack in one pass. It clones or verifies the IsaacLab and unitree_model checkouts at their pinned commits, creates the env, and installs with the constraint files plus the lock as constraints. It then fails unless `pip check` shows only the accepted conflict below and `pip freeze` equals the lock.
 
 ## Alternatives considered
 
@@ -50,6 +52,6 @@ Each entry carries its reason in the file. Exact versions of every installed Pyt
 
 - `scripts/rsl_rl/play.py` imports `get_published_pretrained_checkpoint` from `isaaclab_rl.utils`. IsaacLab moved it there from `isaaclab.utils` in v2.3.2, so upstream's `play.py` fails to import on v2.3.2.
 - `pip check` reports one accepted conflict: `fastapi 0.115.7` (from Isaac Sim) wants `starlette<0.46`, while IsaacLab v2.3.2 pins `starlette==0.49.1` (`source/isaaclab/setup.py:40`, a security update). IsaacLab's pin is kept, which may affect Isaac Sim's fastapi-based services. Go2 training (3 iterations), `play.py` checkpoint loading and ONNX/JIT export all ran with it (headless, 2026-10-14).
-- The env was built in several passes while the constraints were being worked out. Leftovers from an unconstrained pass were removed, and the lock was frozen from the cleaned env. Rebuilding from the constraint files in a single pass has not been done yet (see `TODO.md`).
+- Reproducibility was checked on the original machine (RTX 5080, driver 580.178.04) on 2026-10-14. Both IsaacLab conda envs (`env_isaaclab`, `env_isaaclab_v232`) were removed and the IsaacLab and unitree_model checkouts moved aside; `install_env.sh` then cloned both at their pinned commits and built the env from scratch. The first complete clean build showed that the earlier, multi-pass lock carried five leftover packages (`opentelemetry-*`, `xxhash`), so the lock was regenerated from the clean build. A further build of a fresh env, reusing those clones, then matched it exactly, and Go2 training, `play.py` export and the ONNX I/O check passed on it. Not yet checked on a second machine (see `TODO.md`).
 - IsaacLab 2.3 looks frozen: `release/2.3.0` was last updated 2025-12-02. That is inferred from branch activity, not announced; expect no further fixes on this line.
 - Revisit this ADR when IsaacLab 3.0.0 is released as GA **and** upstream unitree_rl_lab merges its IsaacLab 3.0 support into `main`.

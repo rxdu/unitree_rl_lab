@@ -22,7 +22,7 @@ Currently supports Unitree **Go2**, **H1** and **G1-29dof** robots.
 
 ## Installation
 
-> **Pinned stack (this fork):** IsaacLab `v2.3.2` + Isaac Sim `5.1.0` + rsl-rl-lib `3.1.2` in conda env `env_isaaclab_v232`; see [ADR 0001](docs/adr/0001-pin-isaaclab-v2.3.2.md). Check out IsaacLab at tag `v2.3.2` (not `main`) and run its installer with this repo's constraints: `PIP_CONSTRAINT=<this repo>/scripts/setup/constraints.txt PIP_BUILD_CONSTRAINT=<this repo>/scripts/setup/build-constraints.txt ./isaaclab.sh --install`. Exact versions are in `scripts/setup/env_isaaclab_v232.lock.txt`.
+> **Pinned stack (this fork):** IsaacLab `v2.3.2` + Isaac Sim `5.1.0` + rsl-rl-lib `3.1.2` in conda env `env_isaaclab_v232`; see [ADR 0001](docs/adr/0001-pin-isaaclab-v2.3.2.md). To set it all up (IsaacLab and unitree_model are cloned next to this repo if missing), run `scripts/setup/install_env.sh`; it requires conda, git-lfs and NVIDIA driver 580, and verifies the result against `scripts/setup/env_isaaclab_v232.lock.txt`. The manual steps below describe the upstream setup.
 
 - Install Isaac Lab by following the [installation guide](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/index.html).
 - Install the Unitree RL IsaacLab standalone environments.

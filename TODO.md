@@ -3,7 +3,8 @@
 ## Environment (ADR 0001: IsaacLab v2.3.2 pin)
 
 - [ ] Make `UNITREE_MODEL_DIR` portable across machines: `source/unitree_rl_lab/unitree_rl_lab/assets/robots/unitree.py:20` holds a machine-local absolute path (kept uncommitted).
-- [ ] Add a `scripts/setup/` install script that rebuilds `env_isaaclab_v232` in one pass (conda env from IsaacLab `environment.yml` → torch cu128 → `isaacsim[all,extscache]==5.1.0` → `isaaclab.sh --conda` from inside the env → `isaaclab.sh --install` with `constraints.txt`/`build-constraints.txt` → `pip install -e source/unitree_rl_lab`). Verify it from scratch on a second machine and diff `pip freeze` against `env_isaaclab_v232.lock.txt`. The current env was built in several passes and cleaned (ADR 0001, Consequences).
-- [ ] Remove the old `env_isaaclab` conda env (built from IsaacLab `main`, rsl-rl 5) once `env_isaaclab_v232` has been used for a real training run. Its editable installs now point at the v2.3.2 sources, so it is inconsistent and should not be used.
+- [x] `scripts/setup/install_env.sh` rebuilds `env_isaaclab_v232` in one pass and verifies it against `env_isaaclab_v232.lock.txt`. Verified from scratch on rdu-c34, 2026-10-14 (sources cloned, env built, `pip freeze` == lock, Go2 train/play/export pass).
+- [ ] Run `scripts/setup/install_env.sh` on a second machine; a freeze mismatch there would show platform- or time-dependent resolution (e.g. the `rl_games` git branch moving past the locked commit).
+- [x] Remove the old `env_isaaclab` conda env (built from IsaacLab `main`, rsl-rl 5). Removed 2026-10-14.
 - [ ] Decide whether to `apt-mark hold nvidia-driver-580-open` so an upgrade cannot bring back the driver-615 segfault.
-- [ ] Revisit ADR 0001 when IsaacLab 3.0.0 is GA and upstream merges its `isaaclab3.0` branch into `main`.
+- [ ] Revisit ADR 0001 when IsaacLab 3.0.0 is GA and upstream merges its `isaaclab3.0` branch into `main`. Note for that migration: rsl-rl 3.1.2 already warns that the agent configs lack `obs_groups` `policy`/`critic` keys ("will be removed in a future version"; observed in `play.py` output).

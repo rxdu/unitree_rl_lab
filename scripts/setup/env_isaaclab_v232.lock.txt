@@ -1,4 +1,5 @@
-# Exact package versions of conda env env_isaaclab_v232 (Python 3.11.17, x86_64), frozen 2026-10-14.
+# Exact package versions of conda env env_isaaclab_v232 (Python 3.11.17, x86_64), frozen 2026-10-14
+# from a single-pass build by scripts/setup/install_env.sh, which also verifies a rebuild against this file.
 # Stack: IsaacLab v2.3.2 (37ddf6268, editable from ../IsaacLab) + Isaac Sim 5.1.0 + unitree_rl_lab (editable, this repo).
 # Editable installs (isaaclab*, unitree_rl_lab) are excluded; they come from the pinned source checkouts.
 # Generated with: pip freeze --exclude-editable. See docs/adr/0001-pin-isaaclab-v2.3.2.md.
@@ -160,10 +161,6 @@ onnx==1.23.2
 onnx-ir==1.0.0
 onnxscript==0.7.2
 opencv-python-headless==4.11.0.86
-opentelemetry-api==1.45.1
-opentelemetry-proto==1.45.1
-opentelemetry-sdk==1.45.1
-opentelemetry-semantic-conventions==0.66b1
 orjson==3.13.0
 osqp==0.6.7.post3
 packaging==23.0
@@ -260,6 +257,5 @@ websockets==12.0
 Werkzeug==3.1.9
 widgetsnbextension==4.0.16
 wrapt==1.16.0
-xxhash==4.0.1
 yarl==1.18.3
 zipp @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_zipp_1791091060/work
