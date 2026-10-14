@@ -1,0 +1,6 @@
+# Build-time constraints for env_isaaclab_v232. Apply with PIP_BUILD_CONSTRAINT during `./isaaclab.sh --install`.
+# pip 26.2.1 does not apply PIP_CONSTRAINT to isolated build environments (observed), hence a separate file.
+
+# flatdict==4.0.1 (pinned by IsaacLab v2.3.2) ships only as an sdist whose setup.py imports pkg_resources,
+# which current setuptools no longer provides. Verified to build with this cap.
+setuptools<81

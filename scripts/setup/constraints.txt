@@ -1,0 +1,29 @@
+# Install-time constraints for env_isaaclab_v232 (IsaacLab v2.3.2 + Isaac Sim 5.1.0).
+# See docs/adr/0001-pin-isaaclab-v2.3.2.md. Apply with PIP_CONSTRAINT during `./isaaclab.sh --install`.
+# Each entry caps a package that IsaacLab v2.3.2 requires without an upper bound and that would
+# otherwise resolve to a version incompatible with the rest of the stack.
+
+# Torch used by Isaac Sim 5.1 / IsaacLab v2.3.2 on x86_64 (isaaclab.sh ensure_cuda_torch); install from the
+# cu128 index. Pinning stops other packages from upgrading torch mid-install; isaacsim-core needs torchaudio.
+torch==2.7.0
+torchvision==0.22.0
+torchaudio==2.7.0
+
+# stable-baselines3 2.9.0 requires torch>=2.8; 2.8.0 is the newest release accepting torch 2.7.
+stable-baselines3<2.9
+
+# IsaacLab's skrl 2.x integration (d94504bcf) landed after v2.3.2; v2.3.2 targets skrl 1.x (1.4.3 newest).
+skrl<2
+
+# isaacsim-kernel 5.1 pins packaging==23.0; wheel>=0.46 requires packaging>=24.
+wheel<0.46
+
+# Exact pins of isaacsim-kernel 5.1 that unbounded transitive requirements otherwise upgrade:
+# psutil>=7 via ipython (ipywidgets==8.1.5 <- isaaclab_mimic; rl-games also needs psutil<6),
+# click/idna via ray/requests (rl-games, robomimic).
+click==8.1.7
+idna==3.10
+psutil==5.9.8
+
+# Not constrained, known conflict: IsaacLab v2.3.2 pins starlette==0.49.1 (source/isaaclab/setup.py:40,
+# security update) while isaacsim's fastapi 0.115.7 wants starlette<0.46. IsaacLab's pin is kept.

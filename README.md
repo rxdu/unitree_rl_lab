@@ -1,7 +1,7 @@
 # Unitree RL Lab
 
 [![IsaacSim](https://img.shields.io/badge/IsaacSim-5.1.0-silver.svg)](https://docs.omniverse.nvidia.com/isaacsim/latest/overview.html)
-[![Isaac Lab](https://img.shields.io/badge/IsaacLab-2.3.0-silver)](https://isaac-sim.github.io/IsaacLab)
+[![Isaac Lab](https://img.shields.io/badge/IsaacLab-2.3.2-silver)](https://isaac-sim.github.io/IsaacLab)
 [![License](https://img.shields.io/badge/license-Apache2.0-yellow.svg)](https://opensource.org/license/apache-2-0)
 [![Discord](https://img.shields.io/badge/-Discord-5865F2?style=flat&logo=Discord&logoColor=white)](https://discord.gg/ZwcVwxv5rq)
 
@@ -22,6 +22,8 @@ Currently supports Unitree **Go2**, **H1** and **G1-29dof** robots.
 
 ## Installation
 
+> **Pinned stack (this fork):** IsaacLab `v2.3.2` + Isaac Sim `5.1.0` + rsl-rl-lib `3.1.2` in conda env `env_isaaclab_v232`; see [ADR 0001](docs/adr/0001-pin-isaaclab-v2.3.2.md). Check out IsaacLab at tag `v2.3.2` (not `main`) and run its installer with this repo's constraints: `PIP_CONSTRAINT=<this repo>/scripts/setup/constraints.txt PIP_BUILD_CONSTRAINT=<this repo>/scripts/setup/build-constraints.txt ./isaaclab.sh --install`. Exact versions are in `scripts/setup/env_isaaclab_v232.lock.txt`.
+
 - Install Isaac Lab by following the [installation guide](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/index.html).
 - Install the Unitree RL IsaacLab standalone environments.
 
@@ -40,7 +42,7 @@ Currently supports Unitree **Go2**, **H1** and **G1-29dof** robots.
 - Download unitree robot description files
 
   *Method 1: Using USD Files*
-  - Download unitree usd files from [unitree_model](https://huggingface.co/datasets/unitreerobotics/unitree_model/tree/main), keeping folder structure
+  - Download unitree usd files from [unitree_model](https://huggingface.co/datasets/unitreerobotics/unitree_model/tree/main), keeping folder structure. Install `git-lfs` first (`sudo apt install git-lfs`); without it the clone succeeds but the `*_base.usd` geometry files are LFS pointer stubs.
     ```bash
     git clone https://huggingface.co/datasets/unitreerobotics/unitree_model
     ```
